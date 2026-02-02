@@ -5,6 +5,7 @@ import UserDropdown from "@/components/header/UserDropdown";
 import { useSidebar } from "@/context/SidebarContext";
 import Image from "next/image";
 import Link from "next/link";
+import logo from "../../public/images/logo/logo.png";
 import React, { useState ,useEffect,useRef} from "react";
 
 const AppHeader: React.FC = () => {
@@ -88,14 +89,14 @@ const AppHeader: React.FC = () => {
               width={154}
               height={32}
               className="dark:hidden"
-              src="./images/logo/logo.svg"
+              src={logo}
               alt="Logo"
             />
             <Image
               width={154}
               height={32}
               className="hidden dark:block"
-              src="./images/logo/logo-dark.svg"
+              src={logo}
               alt="Logo"
             />
           </Link>
