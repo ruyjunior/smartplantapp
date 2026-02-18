@@ -3,14 +3,19 @@ import UserInfoCard from "@/components/user-profile/UserInfoCard";
 import UserMetaCard from "@/components/user-profile/UserMetaCard";
 import { Metadata } from "next";
 import React from "react";
+import InfoCard from "./components/InfoCard";
+import infoAPP from "@/lib/infoapp";
+import { fetchCompany } from "@/query/companies/data";
+import { CurrentCompany } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Company | Smart Plant APP",
-  description:
-    "This is Next.js Company page for Smart Plant APP - Next.js Tailwind CSS Admin Dashboard Template",
+  title:
+    `Company | ${infoAPP.name} ${infoAPP.version}`,
+  description: infoAPP.description,
 };
 
-export default function Company() {
+export default async function Company() {
+  const company = await CurrentCompany();
   return (
     <div>
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
@@ -18,7 +23,7 @@ export default function Company() {
           Company
         </h3>
         <div className="space-y-6">
-          <UserInfoCard />
+          <InfoCard company={company}/>
         </div>
       </div>
     </div>

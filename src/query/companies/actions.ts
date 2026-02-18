@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { sql } from '@vercel/postgres';
-import { deleteUnusedFiles } from '@/app/lib/deleteUnusedFiles';
+import { deleteUnusedFiles } from '@/lib/deleteUnusedFiles';
 
 const FormSchema = z.object({
   id: z.string(),

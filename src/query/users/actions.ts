@@ -73,7 +73,6 @@ export async function updateData(
   const validatedFields = UpdateData.safeParse({
     name: formData.get('name'),
     lastname: formData.get('lastname'),
-    email: formData.get('email'),
     password: formData.get('password'),
     role: formData.get('role'),
   });

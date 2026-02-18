@@ -10,7 +10,7 @@ export const Hero = () => {
         alt="Smart Plant APP"
         fill
         priority
-        className="object-cover object-center w-full h-full"
+        className="object-cover object-center w-full h-full opacity-70 rounded-lg"
       />
 
       {/* Overlay */}

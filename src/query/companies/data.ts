@@ -1,5 +1,5 @@
 import { sql } from '@vercel/postgres';
-import { CurrentCompanyId } from '@/app/utils/utils';
+import { CurrentCompanyId } from '@/lib/utils';
 import { Company } from './definitions';
 
 export async function fetchCompany() {

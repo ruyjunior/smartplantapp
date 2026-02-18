@@ -10,11 +10,12 @@ import { Metadata } from "next";
 
 
 import { benefitOne, benefitTwo } from "./components/data";
+import infoAPP from "@/lib/infoapp";
 
 export const metadata: Metadata = {
   title:
-    "Home | Smart Plants",
-  description: "Smart Plants is an application to monitor and control your plants remotely, with the use of IoT devices and sensors.",
+    `Home | ${infoAPP.name} ${infoAPP.version}`,
+  description: infoAPP.description,
 };
 
 export default function Home() {

@@ -31,11 +31,19 @@ export default function UserInfoCard({ user }: { user: User }) {
           <div className="flex gap-8 flex-wrap">
             <div>
               <p className="text-xs text-gray-500 dark:text-gray-400">Name</p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">{user.name} {user.lastname}</p>
+              <p className="text-sm font-medium text-gray-800 dark:text-white/90">{user.name}</p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Surname</p>
+              <p className="text-sm font-medium text-gray-800 dark:text-white/90">{user.lastname}</p>
             </div>
             <div>
               <p className="text-xs text-gray-500 dark:text-gray-400">Email</p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">{user.email}</p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Role</p>
+              <p className="text-sm font-medium text-gray-800 dark:text-white/90">{user.role}</p>
             </div>
             <div>
               <p className="text-xs text-gray-500 dark:text-gray-400">Phone</p>

@@ -3,8 +3,13 @@ import { fetchByEmail, fetchById } from '../query/users/data';
 import crypto from "crypto";
 import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
+import { redirect } from 'next/navigation';
 export async function CurrentCompanyId() {
   const session = await getServerSession();
+  if (!session) {
+    redirect('/signin');
+    return null; // Ou lance uma exceção, dependendo de como você quer lidar com isso
+  }
   if (!session || !session.user || !session.user.email ) {
     throw new Error('User session is not available.');
   }

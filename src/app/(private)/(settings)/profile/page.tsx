@@ -1,14 +1,12 @@
-import UserAddressCard from "@/components/user-profile/UserAddressCard";
-import UserInfoCard from "./components/UserInfoCard";
-import UserMetaCard from "@/components/user-profile/UserMetaCard";
+import infoAPP from "@/lib/infoapp";
+import ProfileCard from "./components/ProfileCard";
 import { CurrentUser } from "@/lib/utils";
 import { Metadata } from "next";
-import React from "react";
 
 export const metadata: Metadata = {
-  title: "Profile | Smart Plant APP",
-  description:
-    "This is Next.js Profile page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
+  title:
+    `Profile | ${infoAPP.name} ${infoAPP.version}`,
+  description: infoAPP.description,
 };
 
 export default async function Profile() {
@@ -20,7 +18,7 @@ export default async function Profile() {
           Profile
         </h3>
         <div className="space-y-6">
-          <UserInfoCard user={user} />
+          <ProfileCard user={user} />
         </div>
       </div>
     </div>

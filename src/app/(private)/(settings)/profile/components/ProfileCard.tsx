@@ -9,7 +9,7 @@ import { User } from "@/query/users/definitions";
 import Image from "next/image";
 import EditForm from "./EditForm";
 
-export default function UserInfoCard({ user }: { user: User }) {
+export default function ProfileCard({ user }: { user: User }) {
   const { isOpen, openModal, closeModal } = useModal();
   const handleSave = () => {
     // Handle save logic here
@@ -25,12 +25,13 @@ export default function UserInfoCard({ user }: { user: User }) {
           </h4>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
-            <div className="w-20 h-20 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800">
+            <div className="w-50 h-50 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800">
               <Image
-                width={80}
-                height={80}
+                width={500}
+                height={500}
                 src={user.avatarurl ? user.avatarurl : "/images/logo/logo-icon.png"}
                 alt="user"
+                className="w-full h-full object-cover"
               />
             </div>
             <div>
