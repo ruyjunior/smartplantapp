@@ -1,25 +1,33 @@
 import { Count } from "@/query/counts/definitions";
-import Badge from "./BadgeValue";
+import Badge, { BadgeColor } from "./BadgeValue";
 
 export default async function CardCounts({ counts, type }: { counts: Count[], type: string }) {
-    {
-        const countsOfType = counts.filter((count) => count.tag === type);
-        //console.log("Counts of type: ", countsOfType);
+    const value = counts[0].value.toString();
+    let colorVariant = "primary" as BadgeColor;
 
-        return (
-            <div className="flex flex-wrap gap-2 mr-2">
-                <Badge>
-                    <div className="flex items-center gap-2 py-2">
-                        <Badge >
-                            {type}
-                        </Badge>
-                        <Badge >
-                            {countsOfType[0].value}
-                        </Badge>
-                    </div>
-                </Badge>
-
-            </div>
-        )
+    if (value == '1') {
+        colorVariant = "success";
+    } else if (value == '0') {
+        colorVariant = "error";
+    } else {
+        colorVariant = "primary";
     }
+
+    return (
+        <div className="flex flex-wrap gap-2 m-2">
+            <Badge>
+                <div className="flex items-center gap-2 py-2">
+                    <Badge >
+                        {type}
+                    </Badge>
+                    <Badge color={colorVariant} >
+                        {(value).toString() === "1" ? "ON" :
+                            (value).toString() === "0" ? "OFF" :
+                                (value).toString()}
+                    </Badge>
+                </div>
+            </Badge>
+
+        </div>
+    )
 }

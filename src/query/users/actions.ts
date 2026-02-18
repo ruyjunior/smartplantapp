@@ -9,6 +9,7 @@ import { deleteUnusedFiles } from '@/lib/deleteUnusedFiles';
 const FormSchema = z.object({
   id: z.string(),
   name: z.string(),
+  lastname: z.string(),
   email: z.string(),
   password: z.string(),
   avatarurl: z.string().optional(),
@@ -22,9 +23,9 @@ const UpdateData = FormSchema.omit({ id: true, idcompany: true });
 export type State = {
   errors?: {
     name?: string[];
+    lastname?: string[];
     email?: string[];
     password?: string[];
-    role?: string[];
   };
   message?: string | null;
 };
@@ -32,6 +33,7 @@ export type State = {
 export async function createData(prevState: State, formData: FormData) {
   const validatedFields = CreateData.safeParse({
     name: formData.get('name'),
+    lastname: formData.get('lastname'),
     email: formData.get('email'),
     password: formData.get('password'),
     role: formData.get('role'),
@@ -45,13 +47,13 @@ export async function createData(prevState: State, formData: FormData) {
       message: 'Missing Fields. Failed to Create.',
     };
   }
-  const { name, email, password, role, idcompany, avatarurl } = validatedFields.data;
+  const { name, lastname, email, password, role, idcompany, avatarurl } = validatedFields.data;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
     await sql`
-        INSERT INTO smartplantapp.users ( name, email, password, role, idcompany, avatarurl )
-        VALUES (${name}, ${email}, ${hashedPassword}, ${role}, ${idcompany}, ${avatarurl})
+        INSERT INTO smartplantapp.users ( name, lastname, email, password, role, idcompany, avatarurl )
+        VALUES (${name}, ${lastname}, ${email}, ${hashedPassword}, ${role}, ${idcompany}, ${avatarurl})
         `;
   } catch (error) {
     return {
@@ -70,10 +72,10 @@ export async function updateData(
 ) {
   const validatedFields = UpdateData.safeParse({
     name: formData.get('name'),
+    lastname: formData.get('lastname'),
     email: formData.get('email'),
     password: formData.get('password'),
     role: formData.get('role'),
-    avatarurl: formData.get('avatarurl'),
   });
 
 
@@ -97,7 +99,7 @@ export async function updateData(
 
       await sql`
         UPDATE smartplantapp.users
-        SET name = ${name}, password = ${hashedPassword}, role = ${role}, avatarurl = ${avatarurl}
+        SET name = ${name}, lastname = ${validatedFields.data.lastname}, password = ${hashedPassword}, role = ${role}, avatarurl = ${avatarurl}
         WHERE id = ${id}
       `;
     } else {
@@ -105,21 +107,23 @@ export async function updateData(
 
       await sql`
         UPDATE smartplantapp.users
-        SET name = ${name}, role = ${role}, avatarurl = ${avatarurl}
+        SET name = ${name}, lastname = ${validatedFields.data.lastname}, role = ${role}, avatarurl = ${avatarurl}
         WHERE id = ${id}
       `;
     }
   } catch (error) {
     return { message: 'Database Error: Failed to Update User.' };
   }
-  deleteUnusedFiles();
-  revalidatePath('/settings/users');
-  redirect('/settings/users?success=Usuario atualizado com sucesso!');
+  //deleteUnusedFiles();
+  revalidatePath('/users');
+redirect(
+  '/users?title=Sucesso&message=Usuario atualizado com sucesso&type=success'
+);
 }
 
-export async function updateUserPassword(id: string, password: string ) {
+export async function updateUserPassword(id: string, password: string) {
   const hashedPassword = await bcrypt.hash(password, 10);
-  
+
   try {
     await sql`
     UPDATE smartplantapp.users 

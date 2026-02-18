@@ -70,13 +70,12 @@ export async function fetchById(id: string) {
         FROM smartplantapp.users
         WHERE users.id = ${id} `;
 
-    const user = data.rows.map((user) => ({
-      ...user,
-    }));
+    const user = data.rows;
+    //console.log('User: ' + user[0]);
 
     return user[0];
-    console.log('User: ' + user[0]);
   } catch (error) {
+    console.log(error);
     console.error('Database Error:', error);
     throw new Error('Failed to fetch user.');
   }

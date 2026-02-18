@@ -1,13 +1,13 @@
-interface InfoApp {
+interface InfoAppInterface {
     name: string;
     site: string;
     version: string;
     description: string;
 }
 
-const infoAPP: InfoApp = {
+const infoAPP: InfoAppInterface = {
     name: "Smart Plant",
-    site: "wwww.smartplant.com.br",
+    site: "smartplant.app.br",
     version: "1.0",
     description: "App for view devices values"
 }
