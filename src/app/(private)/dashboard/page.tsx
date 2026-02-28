@@ -4,9 +4,12 @@ import infoAPP from "@/lib/infoapp";
 import { propsPage } from "@/lib/types";
 import MsgPage from "@/components/common/msgPage";
 import ComponentCard from "@/components/common/ComponentCard";
-import { fetchData } from "@/query/plants/data";
+import { fetchDataPlants } from "@/query/plants/data";
 import CardPlant from "./components/cardPlant";
 import Revalidate from "@/components/common/revalidate";
+import { Suspense } from 'react'
+import  DashboardSkeleton from "./components/skeleton";
+ 
 
 export const metadata: Metadata = {
   title:
@@ -15,17 +18,19 @@ export const metadata: Metadata = {
 };
 
 export default async function Page({ props }: { props: propsPage }) {
-  const plants = fetchData();
+  const plants = fetchDataPlants();
   return (
     <div>
       <Revalidate>
         <PageBreadcrumb pageTitle="Dashboard" backUrl="/home" backUrlName="Home" />
-        <MsgPage props={props} />
-        {(await plants).map((plant) => (
-          <ComponentCard key={plant.id} title={plant.name} className="mb-4">
-            <CardPlant plant={plant} />
-          </ComponentCard>
-        ))}
+        <MsgPage />
+        <Suspense fallback={<DashboardSkeleton />}>
+          {(await plants).map((plant) => (
+            <ComponentCard key={plant.id} title={plant.name} className="mb-4">
+              <CardPlant plant={plant} />
+            </ComponentCard>
+          ))}
+        </Suspense>
       </Revalidate>
     </div>
   );

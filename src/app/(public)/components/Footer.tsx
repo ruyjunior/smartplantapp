@@ -4,6 +4,7 @@ import React from "react";
 import { Container } from "./Container";
 import logo from "../../../../public/images/logo/logo.png";
 import logodev from "../../../../public/images/logo/logo-dev.png";
+import logoicondev from "../../../../public/images/logo/logo-icon-dev.png";
 import infoAPP from "@/lib/infoapp";
 
 export function Footer() {
@@ -25,7 +26,7 @@ export function Footer() {
                   alt="N"
                   width="500"
                   height="500"
-                  className="w-40"
+                  className="w-40 h-40 object-contain rounded-lg grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition duration-300"
                 />
               </Link>
             </div>
@@ -48,7 +49,7 @@ export function Footer() {
                   alt="Powered by Autoric Automação"
                   width="500"
                   height="500"
-                  className="w-30 rounded-lg grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition duration-300"
+                  className="w-100 rounded-lg grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition duration-300"
                 />
               </a>
             </div>
@@ -118,7 +119,7 @@ export function Footer() {
         <div className="my-10 text-sm text-center text-gray-600 dark:text-gray-400">
           Copyright © {new Date().getFullYear()}. Desenvolvido ♥ por{" "}
           <a href="https://autoric.com.br/" target="_blank" rel="noopener">
-            Autoric Automação.
+            Autoric - Automação e Sistemas. {" "}
           </a>{" "}
         </div>
       </Container>

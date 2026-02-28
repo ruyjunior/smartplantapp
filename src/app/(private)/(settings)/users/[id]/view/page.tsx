@@ -5,7 +5,7 @@ import { propsPage } from "@/lib/types";
 import MsgPage from "@/components/common/msgPage";
 import ComponentCard from "@/components/common/ComponentCard";
 import { fetchData } from "@/query/users/data";
-import UserInfoCard from "../../components/UserInfoCard";
+import UserInfoCard from "../../components/UserCard";
 
 export const metadata: Metadata = {
   title:
@@ -19,7 +19,7 @@ export default async function Page({ props }: { props: propsPage }) {
   return (
     <div>
       <PageBreadcrumb pageTitle="Users" backUrl="/home" backUrlName="Home" />
-      <MsgPage props={props} />
+      <MsgPage />
       {(await users).map((user) => (
         <ComponentCard key={user.id} title={user.name} className="mb-4">
           <UserInfoCard user={user} />

@@ -1,11 +1,11 @@
-import { fetchData } from "@/query/areas/data";
+import { fetchDataAreas } from "@/query/areas/data";
 import { Plant } from "@/query/plants/definitions";
 import CardArea from "./cardArea";
 import ComponentCard from "@/components/common/ComponentCard";
 
 
 export default async function CardPlant({ plant }: { plant: Plant }) {
-    const areas = await fetchData(plant.id);
+    const areas = await fetchDataAreas(plant.id);
 
     return (
         <>

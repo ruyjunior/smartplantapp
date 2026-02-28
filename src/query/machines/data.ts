@@ -2,7 +2,7 @@ import { sql } from '@vercel/postgres';
 import { Machine } from '@/query/machines/definitions';
 import { CurrentCompanyId } from '@/lib/utils';
 
-export async function fetchData(idarea : string) {
+export async function fetchDataMachines(idarea : string) {
   try {
     const data = await sql<Machine>`
       SELECT * 

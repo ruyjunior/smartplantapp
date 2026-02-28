@@ -2,7 +2,7 @@ import { sql } from '@vercel/postgres';
 import { Plant } from '@/query/plants/definitions';
 import { CurrentCompanyId } from '@/lib/utils';
 
-export async function fetchData() {
+export async function fetchDataPlants() {
   const idcompany = await CurrentCompanyId();
   try {
     const data = await sql<Plant>`
