@@ -9,6 +9,8 @@ import Image from "next/image";
 import EditForm from "./PlantEditForm";
 import { Plant } from "@/query/plants/definitions";
 import Areas from "./Areas";
+import ComponentCard from "@/components/common/ComponentCard";
+
 
 export default function PlantCard({ plant }: { plant: Plant }) {
   const { isOpen, openModal, closeModal } = useModal();
@@ -28,8 +30,6 @@ export default function PlantCard({ plant }: { plant: Plant }) {
             </div>
           </div>
         </div>
-        <Areas plant={plant}></Areas>
-
         <button
           onClick={openModal}
           className="flex items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 flex-shrink-0"
