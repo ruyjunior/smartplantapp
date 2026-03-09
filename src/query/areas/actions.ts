@@ -3,6 +3,8 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { sql } from '@vercel/postgres';
+import { fetchDataMachines } from '../machines/data';
+import { deleteMachine } from '../machines/actions';
 
 const FormSchema = z.object({
   id: z.string(),
@@ -36,7 +38,7 @@ export async function createData(prevState: State, formData: FormData) {
 
   try {
     await sql`
-        INSERT INTO smartplantapp.areas ( name, email, password, role, idplant, avatarurl )
+        INSERT INTO smartplantapp.areas ( name, idplant )
         VALUES (${name}, ${idplant})
         `;
   } catch (error) {
@@ -45,8 +47,10 @@ export async function createData(prevState: State, formData: FormData) {
     };
   }
 
-  revalidatePath('/areas');
-  redirect('/areas?success=A criação foi um sucesso!');
+  revalidatePath('/plants');
+  redirect(
+    '/plants?title=Sucesso&message=A criação foi um sucesso!&type=success'
+  );
 }
 
 export async function updateData(
@@ -80,15 +84,31 @@ export async function updateData(
   } catch (error) {
     return { message: 'Database Error: Failed to Update Area.' };
   }
-  revalidatePath('/areas');
-  redirect('/areas?success=A atualização foi um sucesso!');
+  revalidatePath('/plants');
+  redirect(
+    '/plants?title=Sucesso&message=A atualização foi um sucesso!&type=success'
+  );
 }
 
-export async function deleteData(id: string) {
-  //throw new Error('Failed to Delete Invoice');
+export async function deleteArea(id: string) {
+  const machinesNumber = (await fetchDataMachines(id)).length;
 
-  await sql`DELETE FROM smartplantapp.areas WHERE id = ${id}`;
-  revalidatePath('/areas');
-  redirect('/areas?success=A exclusão foi realizada!');
+  if (machinesNumber === 0) {
+    await sql`DELETE FROM smartplantapp.areas WHERE id = ${id}`;
+    revalidatePath('/plants');
+    redirect(
+      '/plants?title=Sucesso&message=A exclusão foi um sucesso!&type=success'
+    );
+  } else {
+    revalidatePath('/plants');
+    redirect(
+      '/plants?title=Erro&message=A exclusão falhou. A área tem máquinas associadas.&type=error'
+    );
+  }
 
+}
+
+export async function deleteMachines(idarea: string) {
+  const machines = await fetchDataMachines(idarea);
+  await Promise.all(machines.map(machine => deleteMachine(machine.id)));
 }

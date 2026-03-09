@@ -58,9 +58,9 @@ export default function EditForm({ closeModal, company }: { closeModal: () => vo
                     <Button size="sm" variant="outline" onClick={closeModal}>
                         Close
                     </Button>
-                    <button type={"submit"} disabled={isPending}>
+                    <Button type={"submit"} disabled={isPending}>
                         Save Changes
-                    </button>
+                    </Button>
                 </div>
             </form>
         </div>

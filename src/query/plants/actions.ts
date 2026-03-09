@@ -3,6 +3,12 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { sql } from '@vercel/postgres';
+import { fetchDataAreas } from '../areas/data';
+import { deleteArea } from '../areas/actions';
+import { fetchDataMachines } from '../machines/data';
+import { deleteMachine } from '../machines/actions';
+import { fetchCounts } from '../counts/data';
+import { fetchEvents } from '../events/data';
 
 const FormSchema = z.object({
   id: z.string(),
@@ -36,7 +42,7 @@ export async function createData(prevState: State, formData: FormData) {
 
   try {
     await sql`
-        INSERT INTO smartplantapp.plants ( name, email, password, role, idcompany, avatarurl )
+        INSERT INTO smartplantapp.plants ( name, idcompany )
         VALUES (${name}, ${idcompany})
         `;
   } catch (error) {
@@ -46,7 +52,9 @@ export async function createData(prevState: State, formData: FormData) {
   }
 
   revalidatePath('/plants');
-  redirect('/plants?success=A criação foi um sucesso!');
+  redirect(
+    '/plants?title=Sucesso&message=A criação foi um sucesso!&type=success'
+  );
 }
 
 export async function updateData(
@@ -81,14 +89,23 @@ export async function updateData(
     return { message: 'Database Error: Failed to Update Plant.' };
   }
   revalidatePath('/plants');
-  redirect('/plants?success=A atualização foi um sucesso!');
+  redirect(
+    '/plants?title=Sucesso&message=A atualização foi um sucesso!&type=success'
+  );
 }
 
 export async function deleteData(id: string) {
-  //throw new Error('Failed to Delete Invoice');
-
-  await sql`DELETE FROM smartplantapp.plants WHERE id = ${id}`;
+  const areasNumber = (await fetchDataAreas(id)).length;
+  if (areasNumber === 0) {
+    await sql`DELETE FROM smartplantapp.plants WHERE id = ${id}`;
   revalidatePath('/plants');
-  redirect('/plants?success=A exclusão foi executada com sucesso!');
-
+  redirect(
+    '/plants?title=Sucesso&message=A exclusão foi um sucesso!&type=success'
+  );
+  } else {
+    revalidatePath('/plants');
+    redirect(
+      '/plants?title=Erro&message=A exclusão falhou. A planta tem áreas associadas.&type=error'
+    );
+  }
 }

@@ -12,7 +12,6 @@ export default function EditForm({ closeModal, user }: { closeModal: () => void,
     const updateUserWithId = updateData.bind(null, user.id);
     const [state, formAction] = useActionState(updateUserWithId, initialState);
     const [isPending, startTransition] = useTransition();
-
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         startTransition(() => {
@@ -59,7 +58,7 @@ export default function EditForm({ closeModal, user }: { closeModal: () => void,
 
                             <div className="col-span-2 lg:col-span-1">
                                 <Label>Email Address</Label>
-                                <Input id="email" name="email" type="text" defaultValue={user.email} />
+                                <Input id="email" name="email" type="email" defaultValue={user.email} />
                             </div>
                             <div className="col-span-2 lg:col-span-1">
                                 <Label>Password</Label>

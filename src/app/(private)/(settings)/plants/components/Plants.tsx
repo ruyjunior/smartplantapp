@@ -2,7 +2,8 @@ import { fetchDataPlants } from "@/query/plants/data";
 import PlantCard from "./PlantCard";
 import Areas from "./Areas";
 import ComponentCard from "@/components/common/ComponentCard";
-
+import AreaAdd from "./AreaAdd";
+import PlantDelete from "./PlantDelete";
 
 export default async function Plants() {
   const plants = await fetchDataPlants();
@@ -13,7 +14,10 @@ export default async function Plants() {
           title={"Plant"}
           className="w-full mt-4"
         >
-          <PlantCard plant={plant} />
+          <div className="mb-4 flex flex-row items-center gap-4">
+            <PlantCard plant={plant} />
+            <AreaAdd idplant={plant.id} />
+          </div>
           <ComponentCard
             title={"Areas"}
             className="w-full mt-4"

@@ -5,6 +5,8 @@ import MsgPage from "@/components/common/msgPage";
 import ComponentCard from "@/components/common/ComponentCard";
 import { fetchData } from "@/query/users/data";
 import UserCard from "./components/UserCard";
+import Skeleton from "@/components/common/skeleton";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title:
@@ -23,11 +25,13 @@ export default async function Page({
     <div>
       <PageBreadcrumb pageTitle="Users" backUrl="/home" backUrlName="Home" />
       <MsgPage />
-      <ComponentCard title="" className="mb-1">
-        {users.map((user) => (
-          <UserCard user={user} key={user.id} />
-        ))}
-      </ComponentCard>
+      <Suspense fallback={<Skeleton />}>
+        <ComponentCard title="" className="mb-1">
+          {users.map((user) => (
+            <UserCard user={user} key={user.id} />
+          ))}
+        </ComponentCard>
+      </Suspense>
     </div>
   );
 }

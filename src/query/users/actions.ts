@@ -10,7 +10,7 @@ const FormSchema = z.object({
   id: z.string(),
   name: z.string(),
   lastname: z.string(),
-  email: z.string(),
+  email: z.string().optional(),
   password: z.string(),
   avatarurl: z.string().optional(),
   role: z.string(),
@@ -62,7 +62,9 @@ export async function createData(prevState: State, formData: FormData) {
   }
 
   revalidatePath('/settings/users');
-  redirect('/settings/users?success=Usuario criado com sucesso!');
+  redirect(
+    '/users?title=Sucesso&message=A criação foi um sucesso!&type=success'
+  );
 }
 
 export async function updateData(
@@ -115,9 +117,9 @@ export async function updateData(
   }
   //deleteUnusedFiles();
   revalidatePath('/users');
-redirect(
-  '/users?title=Sucesso&message=Usuario atualizado com sucesso&type=success'
-);
+  redirect(
+    '/users?title=Sucesso&message=A atualização foi um sucesso!&type=success'
+  );
 }
 
 export async function updateUserPassword(id: string, password: string) {
@@ -139,6 +141,8 @@ export async function deleteData(id: string) {
 
   await sql`DELETE FROM smartplantapp.users WHERE id = ${id}`;
   revalidatePath('/settings/users');
-  redirect('/settings/users?success=Usuario apagado com sucesso!');
+  redirect(
+    '/users?title=Sucesso&message=A exclusão foi um sucesso!&type=success'
+  );
 
 }

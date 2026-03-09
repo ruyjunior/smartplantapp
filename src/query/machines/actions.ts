@@ -3,6 +3,8 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { sql } from '@vercel/postgres';
+import { fetchCounts } from '../counts/data';
+import { fetchEvents } from '../events/data';
 
 const FormSchema = z.object({
   id: z.string(),
@@ -36,7 +38,7 @@ export async function createData(prevState: State, formData: FormData) {
 
   try {
     await sql`
-        INSERT INTO smartplantapp.machines ( name, email, password, role, idarea, avatarurl )
+        INSERT INTO smartplantapp.machines ( name, idarea )
         VALUES (${name}, ${idarea})
         `;
   } catch (error) {
@@ -45,8 +47,10 @@ export async function createData(prevState: State, formData: FormData) {
     };
   }
 
-  revalidatePath('/machines');
-  redirect('/machines?success=A criação foi um sucesso!');
+  revalidatePath('/plants');
+  redirect(
+    '/plants?title=Sucesso&message=A criação foi um sucesso!&type=success'
+  );
 }
 
 export async function updateData(
@@ -58,7 +62,6 @@ export async function updateData(
     name: formData.get('name'),
   });
 
-
   if (!validatedFields.success) {
     console.log(validatedFields.error);
     return {
@@ -66,7 +69,6 @@ export async function updateData(
       message: 'Missing Fields. Failed to Update.',
     };
   }
-
 
   const { name } = validatedFields.data;
 
@@ -80,15 +82,31 @@ export async function updateData(
   } catch (error) {
     return { message: 'Database Error: Failed to Update Machine.' };
   }
-  revalidatePath('/machines');
-  redirect('/machines?success=A atualização foi um sucesso!');
+  revalidatePath('/plants');
+  redirect(
+    '/plants?title=Sucesso&message=A atualização foi um sucesso!&type=success'
+  );
 }
 
-export async function deleteData(id: string) {
-  //throw new Error('Failed to Delete Invoice');
+export async function deleteMachine(id: string) {
+  let counts = await fetchCounts(id);
+  let events = await fetchEvents(id);
+  for (const count of counts) {
+    await sql`DELETE FROM smartplantapp.counts WHERE id = ${count.id}`;
+  }
+  for (const event of events) {
+    await sql`DELETE FROM smartplantapp.events WHERE id = ${event.id}`;
+  }
+  
+  counts = await fetchCounts(id);
+  events = await fetchEvents(id);
+  if (counts.length === 0 && events.length === 0) {
+    await sql`DELETE FROM smartplantapp.machines WHERE id = ${id}`;
+  }
 
-  await sql`DELETE FROM smartplantapp.machines WHERE id = ${id}`;
-  revalidatePath('/machines');
-  redirect('/machines?success=A exclusão foi realizada!');
+  revalidatePath('/plants');
+  redirect(
+    '/plants?title=Sucesso&message=A exclusão foi um sucesso!&type=success'
+  );
 
 }

@@ -39,14 +39,7 @@ export type State = {
 export async function createCompany(prevState: State, formData: FormData) {
   const validatedFields = CreateCompany.safeParse({
     name: formData.get('name'),
-    cnpj: formData.get('cnpj'),
-    cep: formData.get('cep'),
-    siteurl: formData.get('siteurl'),
     logourl: formData.get('logourl'),
-    phone: formData.get('phone'),
-    email: formData.get('email'),
-    localaddress: formData.get('localaddress'),
-    slogan: formData.get('slogan')
   });
 
   if (!validatedFields.success) {
@@ -67,8 +60,10 @@ export async function createCompany(prevState: State, formData: FormData) {
       message: 'Database Error: Failed to Create.',
     };
   }
-  revalidatePath('/dashboard');
-  redirect('/dashboard');
+  revalidatePath('/company');
+  redirect(
+    '/company?title=Sucesso&message=A criação foi um sucesso!&type=success'
+  );
 }
 
 export async function updateCompany(
@@ -79,14 +74,6 @@ export async function updateCompany(
   //console.log('Form Data: ' + FormData.arguments );
   const validatedFields = UpdateCompany.safeParse({
     name: formData.get('name'),
-    cnpj: formData.get('cnpj'),
-    cep: formData.get('cep'),
-    siteurl: formData.get('siteurl'),
-    logourl: formData.get('logourl'),
-    phone: formData.get('phone'),
-    email: formData.get('email'),
-    localaddress: formData.get('localaddress'),
-    slogan: formData.get('slogan')
   });
   //console.log('Validates: ' + validatedFields.data?.logourl );
 
@@ -98,35 +85,30 @@ export async function updateCompany(
     };
   }
 
-  const { name, cnpj, cep, siteurl, logourl, phone, email, localaddress, slogan } = validatedFields.data;
-
-  const sanitizedEmail = email || null;
-  const sanitizedPhone = phone || null;
-  const sanitizedCep = cep || null;
-  const sanitizedLocalAddress = localaddress || null;
-  const sanitizedSiteUrl = siteurl || null;
-  const sanitizedLogoUrl = logourl || null;
-  const sanitizedCNPJ = cnpj || null;
-  const sanitizedSlogan = slogan || null;
-
+  const { name } = validatedFields.data;
   try {
     await sql`
     UPDATE smartplantapp.companies
-    SET name = ${name}, cnpj = ${sanitizedCNPJ}, cep = ${sanitizedCep}, siteurl = ${sanitizedSiteUrl}, logourl = ${sanitizedLogoUrl}, phone = ${sanitizedPhone}, email = ${sanitizedEmail}, localaddress = ${sanitizedLocalAddress}, slogan = ${sanitizedSlogan}
+    SET name = ${name} 
     WHERE id = ${id}
   `;
   } catch (error) {
     console.log(error);
     return { message: 'Database Error: Failed to Update Company.' };
   }
-  deleteUnusedFiles();
-  revalidatePath('/settings/company');
-  redirect('/settings/company/');
+  //deleteUnusedFiles();
+  revalidatePath('/company');
+  redirect(
+    '/company?title=Sucesso&message=A atualização foi um sucesso!&type=success'
+  );
 }
 
 export async function deleteCompany(id: string) {
   //throw new Error('Failed to Delete Invoice');
 
   await sql`DELETE FROM smartplantapp.companies WHERE id = ${id}`;
-  revalidatePath('/');
+  revalidatePath('/company');
+  redirect(
+    '/company?title=Sucesso&message=A exclusão foi um sucesso!&type=success'
+  );
 }

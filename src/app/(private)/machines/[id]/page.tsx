@@ -7,7 +7,7 @@ import { fetchById } from "@/query/machines/data";
 import { machine } from "os";
 import ComponentCard from "@/components/common/ComponentCard";
 import LineChartOne from "../components/LineChartOne";
-import { fetchData } from "@/query/counts/data";
+import { fetchCounts } from "@/query/counts/data";
 import BarChartOne from "../components/BarChartOne";
 import Revalidate from "@/components/common/revalidate";
 
@@ -21,7 +21,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const id = params.id;
   const machine = await fetchById(id);
-  const counts = await fetchData(id);
+  const counts = await fetchCounts(id);
   const types = counts.reduce((acc, count) => acc.includes(count.tag) ? acc : [...acc, count.tag], [] as string[]);
 
   return (

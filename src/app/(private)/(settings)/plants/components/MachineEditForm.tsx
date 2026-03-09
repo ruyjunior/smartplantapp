@@ -2,7 +2,7 @@
 import Button from "@/components/ui/button/Button";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
-import { updateData, State } from "@/query/users/actions";
+import { updateData, State } from "@/query/machines/actions";
 import { useActionState, useTransition } from "react";
 import { Machine } from "@/query/machines/definitions";
 
@@ -20,16 +20,7 @@ export default function MachineEditForm({ closeModal, machine }: { closeModal: (
         });
     }
 
-
-    const handleSave = () => {
-        // Handle save logic here
-        console.log("Saving changes...");
-
-        closeModal();
-    };
     return (
-
-
         <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
             <div className="px-2 pr-14">
                 <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
@@ -57,9 +48,9 @@ export default function MachineEditForm({ closeModal, machine }: { closeModal: (
                     <Button size="sm" variant="outline" onClick={closeModal}>
                         Close
                     </Button>
-                    <button type={"submit"} disabled={isPending}>
+                    <Button type={"submit"} disabled={isPending}>
                         Save Changes
-                    </button>
+                    </Button>
                 </div>
             </form>
         </div>
