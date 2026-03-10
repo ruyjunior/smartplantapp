@@ -4,18 +4,11 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { sql } from '@vercel/postgres';
 import { deleteUnusedFiles } from '@/lib/deleteUnusedFiles';
+import { Company } from './definitions';
 
 const FormSchema = z.object({
   id: z.string(),
   name: z.string(),
-  cnpj: z.string().optional(),
-  cep: z.string().optional().nullable(),
-  siteurl: z.string().optional().nullable(),
-  logourl: z.string().optional().nullable(),
-  phone: z.string().optional(),
-  email: z.string().optional(),
-  localaddress: z.string().optional(),
-  slogan: z.string().optional(),
 });
 
 const CreateCompany = FormSchema.omit({ id: true });
@@ -24,14 +17,6 @@ const UpdateCompany = FormSchema.omit({ id: true });
 export type State = {
   errors?: {
     name?: string[];
-    cnpj?: string[];
-    cep?: string[];
-    siteurl?: string[];
-    logourl?: string[] | undefined;
-    phone?: string[];
-    email?: string[];
-    localaddress?: string[];
-    slogan?: string[];
   };
   message?: string | null;
 };
@@ -39,7 +24,6 @@ export type State = {
 export async function createCompany(prevState: State, formData: FormData) {
   const validatedFields = CreateCompany.safeParse({
     name: formData.get('name'),
-    logourl: formData.get('logourl'),
   });
 
   if (!validatedFields.success) {
@@ -48,12 +32,12 @@ export async function createCompany(prevState: State, formData: FormData) {
       message: 'Missing Fields. Failed to Create.',
     };
   }
-  const { name, cnpj, cep, siteurl, logourl, phone, email, localaddress, slogan } = validatedFields.data;
+  const { name } = validatedFields.data;
 
   try {
-    await sql`
-        INSERT INTO smartplantapp.companies ( name, cnpj, cep, siteurl, logourl, phone, email, localaddress)
-        VALUES (${name}, ${cnpj}, ${cep}, ${siteurl}, ${logourl}, ${phone}, ${email}, ${localaddress}, ${slogan})
+    await sql<Company>`
+        INSERT INTO smartplantapp.companies ( name )
+        VALUES (${name})
         `;
   } catch (error) {
     return {

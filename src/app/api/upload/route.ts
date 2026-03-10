@@ -1,7 +1,7 @@
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { getServerSession } from "next-auth";
+//import { getServerSession } from "next-auth";
 
 import { deleteUnusedFiles } from '@/lib/deleteUnusedFiles';
 import { CurrentUser } from '@/lib/utils';
@@ -21,7 +21,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         // ⚠️ Authenticate and authorize users before generating the token.
         // Otherwise, you're allowing anonymous uploads.
         //const session = await auth();
-        const session = await getServerSession();
+        const session = await auth();
         //console.log("Session:", session);
         if (!session || !session.user) {
           throw new Error('Not authenticated');

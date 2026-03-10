@@ -31,6 +31,7 @@ export type State = {
 };
 
 export async function createData(prevState: State, formData: FormData) {
+  console.log('FormData:', Object.fromEntries(formData.entries()));
   const validatedFields = CreateData.safeParse({
     name: formData.get('name'),
     lastname: formData.get('lastname'),
@@ -91,7 +92,7 @@ export async function updateData(
 
 
   const { name, password, role, avatarurl } = validatedFields.data;
-  const hashedPassword = await bcrypt.hash(password, 10);
+  //const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
     if (password) {

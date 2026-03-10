@@ -83,12 +83,11 @@ export async function fetchById(id: string) {
 
 export async function fetchByEmail(email: string): Promise<User> {
   try {
-    //console.log("email: ", email);
-
-    const data = await sql`
+    const data = await sql<User>`
       SELECT * FROM smartplantapp.users WHERE users.email = ${email} LIMIT 1
     `;
-    const user = data.rows[0] as User;
+    const user = data.rows[0];
+
     return user;
   } catch (error) {
     console.log(error);

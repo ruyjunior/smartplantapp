@@ -1,23 +1,39 @@
 "use client";
-import React, { useState } from "react";
 import ComponentCard from "../../common/ComponentCard";
 import FileInput from "../input/FileInput";
 import Label from "../Label";
 import { upload } from '@vercel/blob/client';
 import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+
 
 
 export default function FileInputExample() {
+  const { data: session, status } = useSession();
+  const [user, setUser] = useState<any>(null);
+
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      console.log("Selected file:", file.name);
-    }
-  };
+  useEffect(() => {
+    if (status !== "authenticated") return;
 
+    async function loadUser() {
+      const res = await fetch("/api/user");
+
+      if (!res.ok) return;
+
+      const data = await res.json();
+
+      if (data) {
+        setUser(data);
+      }
+    }
+
+    loadUser();
+    setAvatarUrl(user?.avatarurl || null);
+  }, [status, user?.avatarurl]);
 
   async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];

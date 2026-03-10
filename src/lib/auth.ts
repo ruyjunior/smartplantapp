@@ -1,11 +1,15 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthConfig } from "next-auth";
 import { DefaultSession, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { sql } from "@vercel/postgres";
 import { JWT } from "next-auth/jwt";
 import { AdapterUser } from "next-auth/adapters";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { fetchByEmail } from "@/query/users/data";
+import Google from "next-auth/providers/google"
+import { Company } from "@/query/companies/definitions";
+import { sql } from '@vercel/postgres';
+
 
 declare module "next-auth" {
   interface Session {
@@ -27,17 +31,7 @@ declare module "next-auth/jwt" {
   }
 }
 
-async function getUser(email: string): Promise<any | null> {
-  try {
-    const users = await sql<User>`SELECT * FROM smartprojectsapp.users WHERE email=${email}`;
-    return users.rows[0] || null;
-  } catch (error) {
-    console.error("Erro ao buscar usuário:", error);
-    return null;
-  }
-}
-
-export const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthConfig = {
   pages: {
     signIn: "/login",
   },
@@ -60,15 +54,16 @@ export const authOptions: NextAuthOptions = {
         }
 
         const { email, password } = parsedCredentials.data;
-        const user = await getUser(email);
+        const user = await fetchByEmail(email);
+        console.log("Usuário encontrado:", user);
         if (!user) {
-          console.log("Usuário não encontrado.");
+          //console.log("Usuário não encontrado.");
           return null;
         }
 
         const passwordsMatch = await bcrypt.compare(password, user?.password);
         if (!passwordsMatch) {
-          console.log("Senha incorreta.");
+          //console.log("Senha incorreta.");
           return null;
         }
         return {
@@ -79,7 +74,12 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID!,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+    }) as any,
   ],
+
   session: {
     strategy: "jwt",
     maxAge: 60 * 60 * 24 * 7, // 7 dias
@@ -98,7 +98,7 @@ export const authOptions: NextAuthOptions = {
           name: user.name,
           email: user.email,
           role: (user as User).role
-        };
+        } as JWT;
       }
       //console.log("Token final com role:", token); // Debug
       return token;
@@ -112,10 +112,38 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    async signIn({ user, account }) {
+
+      if (account?.provider === "google") {
+
+        const existingUser = await fetchByEmail(user.email!)
+
+        if (!existingUser) {
+          const nameCompany = "New Company"
+          const result = await sql<Company>`
+            INSERT INTO smartplantapp.companies (name)
+            VALUES (${nameCompany})
+            RETURNING id
+          `;
+
+          const idcompany = result.rows[0].id;
+
+          await sql`
+            INSERT INTO smartplantapp.users ( name, email, role, idcompany, avatarurl )
+            VALUES (${user.name}, ${user.email}, 'admin', ${idcompany}, ${user.image})
+          `;
+
+        }
+
+      }
+
+      return true
+    },
+    async redirect({ url, baseUrl }) {
+      return `${baseUrl}/dashboard`
+    }
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
-export const { handlers, auth, signIn, signOut } = NextAuth(authOptions);
+export const { handlers, signIn, signOut, auth } = NextAuth(authOptions);

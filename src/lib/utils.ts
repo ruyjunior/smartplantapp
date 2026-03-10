@@ -1,16 +1,16 @@
 import { fetchCompanyById } from '../query/companies/data';
-import { fetchByEmail, fetchById } from '../query/users/data';
+import { fetchByEmail } from '../query/users/data';
 import crypto from "crypto";
-import { getServerSession } from "next-auth";
-import { useSession } from "next-auth/react";
 import { redirect } from 'next/navigation';
+import { auth } from './auth';
+
 export async function CurrentCompanyId() {
-  const session = await getServerSession();
+  const session = await auth();
   if (!session) {
     redirect('/signin');
-    return null; // Ou lance uma exceção, dependendo de como você quer lidar com isso
+    return null; 
   }
-  if (!session || !session.user || !session.user.email ) {
+  if (!session || !session.user || !session.user.email) {
     throw new Error('User session is not available.');
   }
   const user = await fetchByEmail(session.user.email);
@@ -22,7 +22,8 @@ export async function CurrentCompanyId() {
 }
 
 export async function CurrentCompany() {
-  const session = await getServerSession();
+  const session = await auth();
+
   if (!session || !session.user || !session.user.email) {
     throw new Error('User session is not available.');
   }
@@ -35,7 +36,7 @@ export async function CurrentCompany() {
 }
 
 export async function CurrentUser() {
-  const session = await getServerSession();
+  const session = await auth();
   if (!session || !session?.user || !session.user.email) {
     throw new Error('User session is not available.');
   }

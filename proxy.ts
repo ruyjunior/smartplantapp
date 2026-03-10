@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function proxy(request: Request) {
   const session = await auth(); // auth() já retorna os dados da sessão corretamente
-  if (!session.user) {
+  if (!session?.user) {
     return NextResponse.redirect(new URL("/signin", request.url));
   }
 

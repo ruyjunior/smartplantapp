@@ -19,15 +19,6 @@ export default function InfoCard({ company }: { company: Company }) {
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
-            <div className="w-50 h-50 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800">
-              <Image
-                width={500}
-                height={500}
-                src={company.logourl ? company.logourl : "/images/logo/logo-icon.png"}
-                alt="company"
-                className="w-full h-full object-cover"
-              />
-            </div>
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                 Company Name
