@@ -7,7 +7,7 @@ import { upload } from '@vercel/blob/client';
 import Image from "next/image";
 
 
-export default function FileInputExample({ iduser } : {iduser : string }) {
+export default function FileInputExample() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 

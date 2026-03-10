@@ -88,7 +88,7 @@ export default function EditForm({ closeModal, user }: { closeModal: () => void,
                             </div>
                             <div className="col-span-2">
                                 <Label>Profile Picture</Label>
-                                <FileInputExample iduser={user.id} />
+                                <FileInputExample />
                             </div>
                         </div>
                     </div>
