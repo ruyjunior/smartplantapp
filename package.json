@@ -27,6 +27,7 @@
     "auth": "^1.2.3",
     "autoprefixer": "^10.4.22",
     "bcryptjs": "^3.0.3",
+    "blob": "^0.1.0",
     "flatpickr": "^4.6.13",
     "next": "16.0.10",
     "next-auth": "^4.24.13",
@@ -43,6 +44,7 @@
     "stripe": "^20.3.0",
     "swiper": "^11.2.10",
     "tailwind-merge": "^2.6.0",
+    "vercel": "^50.29.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {

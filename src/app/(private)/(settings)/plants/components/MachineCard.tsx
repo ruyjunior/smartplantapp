@@ -18,6 +18,8 @@ export default function MachineCard({ machine }: { machine: Machine }) {
             <div>
               <p className="text-xs text-gray-500 dark:text-gray-400">Name</p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">{machine.name}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">ID</p>
+
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">{machine.id}</p>
             </div>
           </div>

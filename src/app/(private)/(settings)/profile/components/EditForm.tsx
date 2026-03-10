@@ -4,7 +4,10 @@ import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import { User } from "@/query/users/definitions";
 import { updateData, State } from "@/query/users/actions";
-import { useActionState, useTransition } from "react";
+import { useActionState, useState, useTransition } from "react";
+import FileInputExample from "@/components/form/form-elements/FileInputExample";
+import { upload } from '@vercel/blob/client';
+
 
 export default function EditForm({ closeModal, user }: { closeModal: () => void, user: User }) {
 
@@ -12,23 +15,31 @@ export default function EditForm({ closeModal, user }: { closeModal: () => void,
     const updateUserWithId = updateData.bind(null, user.id);
     const [state, formAction] = useActionState(updateUserWithId, initialState);
     const [isPending, startTransition] = useTransition();
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(user.avatarurl ?? null);
+    const [uploading, setUploading] = useState(false);
+
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         startTransition(() => {
             formAction(new FormData(e.currentTarget));
         });
     }
+    async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setUploading(true);
+        try {
+            const newBlob = await upload(file.name, file, {
+                access: 'public',
+                handleUploadUrl: '/api/upload',
+            });
+            setAvatarUrl(newBlob.url);
+        } finally {
+            setUploading(false);
+        }
+    }
 
-
-    const handleSave = () => {
-        // Handle save logic here
-        console.log("Saving changes...");
-
-        closeModal();
-    };
     return (
-
-
         <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
             <div className="px-2 pr-14">
                 <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
@@ -74,6 +85,10 @@ export default function EditForm({ closeModal, user }: { closeModal: () => void,
                                 <Label>Bio</Label>
                                 <Input id="bio" name="bio" type="text" defaultValue={user.bio} />
                             </div>
+                            <div className="col-span-2">
+                                <Label>Profile Picture</Label>
+                                <FileInputExample />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -81,9 +96,9 @@ export default function EditForm({ closeModal, user }: { closeModal: () => void,
                     <Button size="sm" variant="outline" onClick={closeModal}>
                         Close
                     </Button>
-                    <button type={"submit"} disabled={isPending}>
+                    <Button type={"submit"} disabled={isPending}>
                         Save Changes
-                    </button>
+                    </Button>
                 </div>
             </form>
         </div>
