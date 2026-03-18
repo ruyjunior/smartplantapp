@@ -23,7 +23,7 @@ export default function EditForm({ closeModal, user }: { closeModal: () => void,
 
     const handleSave = () => {
         // Handle save logic here
-        console.log("Saving changes...");
+        //console.log("Saving changes...");
 
         closeModal();
     };

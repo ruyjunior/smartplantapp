@@ -55,7 +55,7 @@ export const authOptions: NextAuthConfig = {
 
         const { email, password } = parsedCredentials.data;
         const user = await fetchByEmail(email);
-        console.log("Usuário encontrado:", user);
+        //console.log("Usuário encontrado:", user);
         if (!user) {
           //console.log("Usuário não encontrado.");
           return null;

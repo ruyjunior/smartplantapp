@@ -31,7 +31,7 @@ export type State = {
 };
 
 export async function createData(prevState: State, formData: FormData) {
-  console.log('FormData:', Object.fromEntries(formData.entries()));
+  //console.log('FormData:', Object.fromEntries(formData.entries()));
   const validatedFields = CreateData.safeParse({
     name: formData.get('name'),
     lastname: formData.get('lastname'),

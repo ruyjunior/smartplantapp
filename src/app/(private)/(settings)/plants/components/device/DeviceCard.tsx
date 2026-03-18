@@ -6,6 +6,8 @@ import EditForm from "./DeviceEditForm";
 import { Device } from "@/query/devices/definitions";
 import { PencilIcon } from "@/icons";
 import DeviceDelete from "./DeviceDelete";
+import { formatDateTimeDb, formatDateToLocal, formatDateToTimeDb, formatTime, FullDateToDateTime } from "@/lib/formatTime";
+import { format } from "path";
 
 export default function DeviceCard({ device }: { device: Device }) {
   const { isOpen, openModal, closeModal } = useModal();
@@ -15,8 +17,10 @@ export default function DeviceCard({ device }: { device: Device }) {
         <div className="flex items-center gap-4 flex-1">
           <div className="flex gap-8 flex-wrap">
             <div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Name | MAC | Type </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">NAME | MAC | TYPE </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">{device.name} | {device.mac} | {device.type}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">CREATED AT | LAST HEARTBEAT </p>
+              <p className="text-sm font-medium text-gray-800 dark:text-white/90">{formatDateTimeDb(device.created_at)} | {formatDateTimeDb(device.lastheartbeat)}</p>
             </div>
           </div>
         </div>

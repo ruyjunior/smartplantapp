@@ -73,7 +73,7 @@ export async function fetchById(id: string) {
     }));
 
     return plant[0];
-    console.log('Plant: ' + plant[0]);
+    //console.log('Plant: ' + plant[0]);
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch plant.');

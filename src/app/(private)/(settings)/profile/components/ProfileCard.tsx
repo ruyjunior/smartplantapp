@@ -13,7 +13,7 @@ export default function ProfileCard({ user }: { user: User }) {
   const { isOpen, openModal, closeModal } = useModal();
   const handleSave = () => {
     // Handle save logic here
-    console.log("Saving changes...");
+    //console.log("Saving changes...");
     closeModal();
   };
   return (

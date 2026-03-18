@@ -23,7 +23,7 @@ export default function EditForm({ closeModal, company }: { closeModal: () => vo
 
     const handleSave = () => {
         // Handle save logic here
-        console.log("Saving changes...");
+        //console.log("Saving changes...");
 
         closeModal();
     };

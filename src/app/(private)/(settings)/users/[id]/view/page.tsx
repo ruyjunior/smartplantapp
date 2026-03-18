@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default async function Page({ props }: { props: propsPage }) {
   const users = fetchData();
-  console.log(props);
+  //console.log(props);
   return (
     <div>
       <PageBreadcrumb pageTitle="Users" backUrl="/home" backUrlName="Home" />

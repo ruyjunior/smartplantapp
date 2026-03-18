@@ -25,7 +25,7 @@ export function PopupWidget() {
   const userName = useWatch({ control, name: "name", defaultValue: "Someone" });
 
   const onSubmit = async (data: any, e: any) => {
-    console.log(data);
+    //console.log(data);
     await fetch("https://api.web3forms.com/submit", {
       method: "POST",
       headers: {

@@ -15,7 +15,7 @@ export default async function Machines({ area }: { area: Area }) {
             <MachineCard key={machine.id} machine={machine} />
             <DeviceAdd idmachine={machine.id} />
           </div>
-          <ComponentCard title={"Machines"} className="w-full mt-4">
+          <ComponentCard title={"Devices"} className="w-full mt-4">
             <Devices machine={machine} />
           </ComponentCard>
         </div>

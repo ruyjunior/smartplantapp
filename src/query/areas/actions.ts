@@ -64,7 +64,7 @@ export async function updateData(
 
 
   if (!validatedFields.success) {
-    console.log(validatedFields.error);
+    //console.log(validatedFields.error);
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields. Failed to Update.',

@@ -32,7 +32,7 @@ export default function UserDropdown() {
 
   if (status === "loading") return null;
 
-  console.log("Current User in Dropdown:", user);
+  //console.log("Current User in Dropdown:", user);
 
   function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation();
