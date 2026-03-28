@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 
 export async function POST(request: Request) {
-
+  console.log("Chegou Heartbeat");
   try {
 
     const body = await request.json();
@@ -44,7 +44,8 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({
-      status: "ok"
+      status: "ok",
+      heartbeatInterval: 20000
     });
 
   } catch (error) {
