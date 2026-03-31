@@ -7,4 +7,5 @@ export type Device = {
   idmachine: string | null
   lastheartbeat: string
   created_at: string
+  heartbeatInterval: string
 }
