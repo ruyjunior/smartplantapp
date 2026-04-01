@@ -8,6 +8,8 @@ import CounterCard from "./events/CounterCard";
 import TemperatureTrend from "./trends/temperatueTrend";
 import { useState } from "react";
 import { Modal } from "../Modal";
+import FlowCard from "./events/FlowCard";
+import FlowTrend from "./trends/flowTrend";
 
 export default function CardEvents({
   events,
@@ -16,7 +18,10 @@ export default function CardEvents({
   events: Event[];
   type: string;
 }) {
-  const [open, setOpen] = useState(false);
+  const [openTemperature, setOpenTemperature] = useState(false);
+  const [openHumidity, setOpenHumidity] = useState(false);
+  const [openCounter, setOpenCounter] = useState(false);
+  const [openFlow, setOpenFlow] = useState(false);
 
   const value = Number(events[0]?.value ?? 0);
 
@@ -28,14 +33,14 @@ export default function CardEvents({
       return (
         <>
           {/* CARD */}
-          <div onClick={() => setOpen(true)} className="cursor-pointer">
+          <div onClick={() => setOpenTemperature(true)} className="cursor-pointer">
             <TemperatureCard value={value} min={min} max={max} />
           </div>
 
           {/* MODAL */}
-          <Modal open={open} onClose={() => setOpen(false)}>
-            <h2 
-        className="text-base font-medium text-gray-800 dark:text-white/90 mb-4">
+          <Modal open={openTemperature} onClose={() => setOpenTemperature(false)}>
+            <h2
+              className="text-base font-medium text-gray-800 dark:text-white/90 mb-4">
               Temperature Trend
             </h2>
 
@@ -50,6 +55,25 @@ export default function CardEvents({
     case "counter":
       return <CounterCard value={value} />;
 
+    case "flow":
+      const flowToday = events.reduce((acc, event) => acc + Number(event.value), 0);
+      return (
+        <>
+          <div onClick={() => setOpenTemperature(true)} className="cursor-pointer">
+            <FlowCard value={flowToday} />
+          </div>
+                    {/* MODAL */}
+          <Modal open={openTemperature} onClose={() => setOpenTemperature(false)}>
+            <h2
+              className="text-base font-medium text-gray-800 dark:text-white/90 mb-4">
+              Flow Trend
+            </h2>
+
+            <FlowTrend startHour={0} events={events} />
+          </Modal>
+
+        </>
+      );
     default:
       return <StatusCard value={value} type={type} />;
   }
